@@ -51,6 +51,8 @@ const stages: Stage[] = [
   }
 ];
 
+const servicesPills = ["Full-Stack Dev", "SaaS Products", "AI Consultancy", "Web Development"];
+
 // Custom Canvas Hook for Stage Rendering
 function useStageCanvas(
   canvasRef: RefObject<HTMLCanvasElement>,
@@ -432,6 +434,31 @@ export default function BuilderHero() {
     }
   }, [activeStage]);
 
+  const pillContainerRef = useRef<HTMLDivElement>(null);
+
+  // Automatically scroll/center the active service pill inside the container on mobile screens
+  useEffect(() => {
+    const container = pillContainerRef.current;
+    if (!container) return;
+
+    // Only scroll if the container has scrollable content (mobile views)
+    if (container.scrollWidth <= container.clientWidth) return;
+
+    const pills = container.querySelectorAll(".service-pill-item");
+    const activePill = pills[activeStage] as HTMLElement;
+
+    if (activePill) {
+      const containerWidth = container.clientWidth;
+      const pillWidth = activePill.clientWidth;
+      const pillOffsetLeft = activePill.offsetLeft;
+
+      container.scrollTo({
+        left: pillOffsetLeft - (containerWidth - pillWidth) / 2,
+        behavior: "smooth"
+      });
+    }
+  }, [activeStage]);
+
   useEffect(() => {
     let animId: number;
     const startTime = performance.now();
@@ -640,6 +667,9 @@ export default function BuilderHero() {
           .connector-line-wrapper {
             display: none !important;
           }
+        }
+        .service-pill-bar::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
 
@@ -868,10 +898,13 @@ export default function BuilderHero() {
 
       {/* Bottom Service Pill bar */}
       <div
+        ref={pillContainerRef}
+        className="service-pill-bar"
         style={{
           position: "relative",
           zIndex: 1,
           display: "inline-flex",
+          alignItems: "center",
           gap: "28px",
           padding: "13px 28px",
           border: "0.5px solid rgba(83, 74, 183, 0.2)",
@@ -883,73 +916,38 @@ export default function BuilderHero() {
           overflowX: "auto"
         }}
       >
-        <span
-          style={{
-            fontSize: "10.5px",
-            color: "rgba(127, 119, 221, 0.7)",
-            letterSpacing: "1px",
-            whiteSpace: "nowrap"
-          }}
-        >
-          Full-Stack Dev
-        </span>
-        <span
-          style={{
-            color: "rgba(83, 74, 183, 0.3)",
-            fontSize: "10.5px",
-            userSelect: "none"
-          }}
-        >
-          ·
-        </span>
-        <span
-          style={{
-            fontSize: "10.5px",
-            color: "rgba(127, 119, 221, 0.7)",
-            letterSpacing: "1px",
-            whiteSpace: "nowrap"
-          }}
-        >
-          SaaS Products
-        </span>
-        <span
-          style={{
-            color: "rgba(83, 74, 183, 0.3)",
-            fontSize: "10.5px",
-            userSelect: "none"
-          }}
-        >
-          ·
-        </span>
-        <span
-          style={{
-            fontSize: "10.5px",
-            color: "rgba(127, 119, 221, 0.7)",
-            letterSpacing: "1px",
-            whiteSpace: "nowrap"
-          }}
-        >
-          AI Consultancy
-        </span>
-        <span
-          style={{
-            color: "rgba(83, 74, 183, 0.3)",
-            fontSize: "10.5px",
-            userSelect: "none"
-          }}
-        >
-          ·
-        </span>
-        <span
-          style={{
-            fontSize: "10.5px",
-            color: "rgba(127, 119, 221, 0.7)",
-            letterSpacing: "1px",
-            whiteSpace: "nowrap"
-          }}
-        >
-          Web Development
-        </span>
+        {servicesPills.map((pill, index) => {
+          const isActive = activeStage === index;
+          return (
+            <React.Fragment key={pill}>
+              <span
+                className="service-pill-item"
+                style={{
+                  fontSize: "10.5px",
+                  color: isActive ? "#1D9E75" : "rgba(127, 119, 221, 0.7)",
+                  textShadow: isActive ? "0 0 8px rgba(29, 158, 117, 0.3)" : "none",
+                  fontWeight: isActive ? 600 : 400,
+                  letterSpacing: "1px",
+                  whiteSpace: "nowrap",
+                  transition: "all 300ms ease"
+                }}
+              >
+                {pill}
+              </span>
+              {index < servicesPills.length - 1 && (
+                <span
+                  style={{
+                    color: "rgba(83, 74, 183, 0.3)",
+                    fontSize: "10.5px",
+                    userSelect: "none"
+                  }}
+                >
+                  ·
+                </span>
+              )}
+            </React.Fragment>
+          );
+        })}
       </div>
     </section>
   );
