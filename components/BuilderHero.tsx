@@ -407,6 +407,27 @@ export default function BuilderHero() {
   const [connectorProgress, setConnectorProgress] = useState<number[]>([0, 0, 0]);
   const [completedStages, setCompletedStages] = useState<number[]>([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Automatically scroll/center the active stage card inside the container on mobile/tablet screens
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const cards = container.querySelectorAll(".stage-card-item");
+    const activeCard = cards[activeStage] as HTMLElement;
+
+    if (activeCard) {
+      const containerWidth = container.clientWidth;
+      const cardWidth = activeCard.clientWidth;
+      const cardOffsetLeft = activeCard.offsetLeft;
+
+      container.scrollTo({
+        left: cardOffsetLeft - (containerWidth - cardWidth) / 2,
+        behavior: "smooth"
+      });
+    }
+  }, [activeStage]);
 
   useEffect(() => {
     let animId: number;
@@ -605,9 +626,27 @@ export default function BuilderHero() {
         .stage-row-scroll::-webkit-scrollbar {
           display: none; /* Hide Chrome/Safari scrollbar */
         }
+        .stage-card-item {
+          width: 215px;
+          min-width: 185px;
+          scroll-snap-align: center;
+        }
         @media (max-width: 992px) {
           .stage-row-scroll {
             justify-content: flex-start;
+            scroll-snap-type: x mandatory;
+          }
+          .connector-line-wrapper {
+            display: none !important;
+          }
+        }
+        @media (max-width: 620px) {
+          .stage-card-item {
+            width: calc(100vw - 48px) !important;
+            min-width: calc(100vw - 48px) !important;
+          }
+          .stage-row-scroll {
+            gap: 16px;
           }
         }
       `}</style>
@@ -691,7 +730,7 @@ export default function BuilderHero() {
       </div>
 
       {/* Stage Grid Container Row */}
-      <div className="stage-row-scroll" style={{ position: "relative", zIndex: 1 }}>
+      <div ref={scrollContainerRef} className="stage-row-scroll" style={{ position: "relative", zIndex: 1 }}>
         {stages.map((stage, index) => {
           const isActive = activeStage === index;
           const isCompleted = completedStages.includes(index);
@@ -706,9 +745,8 @@ export default function BuilderHero() {
             <React.Fragment key={stage.label}>
               {/* Individual Stage Card */}
               <div
+                className="stage-card-item"
                 style={{
-                  width: "215px",
-                  minWidth: "185px",
                   borderRadius: "14px",
                   padding: "20px 16px",
                   border: currentBorder,
