@@ -281,7 +281,13 @@ function Hero() {
     <header className="hero" id="home">
       <nav className="nav">
         <a className="brand" href="#home" aria-label="Darshonic home">
-          <span className="brand-mark">D</span>
+          <span className="brand-mark brand-mark-image">
+            <img
+              src="/logos/ChatGPT Image Jul 4, 2026, 01_03_13 PM.png"
+              alt="Darshonic logo"
+              className="brand-logo"
+            />
+          </span>
           <span>Darshonic</span>
         </a>
         <div className="nav-links" aria-label="Primary navigation">
