@@ -414,6 +414,9 @@ export default function BuilderHero() {
     const container = scrollContainerRef.current;
     if (!container) return;
 
+    // Only scroll if the container has scrollable content (mobile/tablet views)
+    if (container.scrollWidth <= container.clientWidth) return;
+
     const cards = container.querySelectorAll(".stage-card-item");
     const activeCard = cards[activeStage] as HTMLElement;
 
