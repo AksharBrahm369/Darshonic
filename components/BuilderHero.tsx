@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, RefObject } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Menu, X } from "lucide-react";
 
 // Types and Interfaces
 interface Stage {
@@ -406,6 +406,7 @@ export default function BuilderHero() {
   const [stageProgress, setStageProgress] = useState<number>(0);
   const [connectorProgress, setConnectorProgress] = useState<number[]>([0, 0, 0]);
   const [completedStages, setCompletedStages] = useState<number[]>([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     let animId: number;
@@ -483,16 +484,106 @@ export default function BuilderHero() {
           <a href="#process">Process</a>
           <a href="#contact">Contact</a>
         </div>
-        <a className="nav-action" href="#contact">
+        <a className="nav-action nav-action-desktop" href="#contact">
           Start Project
           <ChevronRight size={16} />
         </a>
+        
+        {/* Hamburger Menu Toggle for Mobile */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="mobile-menu-btn"
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </nav>
+
+      {/* Fullscreen Mobile Drawer Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(5, 5, 14, 0.97)",
+            backdropFilter: "blur(18px)",
+            zIndex: 90,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "28px",
+            animation: "drawerFadeIn 0.22s ease-out"
+          }}
+        >
+          <a
+            href="#services"
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ fontSize: "20px", color: "#ffffff", textDecoration: "none", fontWeight: 500, letterSpacing: "1px" }}
+          >
+            Services
+          </a>
+          <a
+            href="#vision-map"
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ fontSize: "20px", color: "#ffffff", textDecoration: "none", fontWeight: 500, letterSpacing: "1px" }}
+          >
+            Vision Map
+          </a>
+          <a
+            href="#process"
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ fontSize: "20px", color: "#ffffff", textDecoration: "none", fontWeight: 500, letterSpacing: "1px" }}
+          >
+            Process
+          </a>
+          <a
+            href="#contact"
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ fontSize: "20px", color: "#ffffff", textDecoration: "none", fontWeight: 500, letterSpacing: "1px" }}
+          >
+            Contact
+          </a>
+          <a
+            href="#contact"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="nav-action"
+            style={{ marginTop: "12px", minHeight: "40px", padding: "0 22px", fontSize: "0.95rem" }}
+          >
+            Start Project
+            <ChevronRight size={16} />
+          </a>
+        </div>
+      )}
       {/* Global Animation Stylesheet injection */}
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; transform: scale(1); }
           50%       { opacity: 0.4; transform: scale(0.7); }
+        }
+        @keyframes drawerFadeIn {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .mobile-menu-btn {
+          display: none !important;
+          background: none;
+          border: none;
+          color: #ffffff;
+          cursor: pointer;
+          padding: 8px;
+          align-items: center;
+          justify-content: center;
+        }
+        @media (max-width: 820px) {
+          .mobile-menu-btn {
+            display: inline-flex !important;
+            position: relative;
+            z-index: 100;
+          }
+          .nav-action-desktop {
+            display: none !important;
+          }
         }
         .stage-pulse-dot {
           animation: pulse 1.5s infinite;

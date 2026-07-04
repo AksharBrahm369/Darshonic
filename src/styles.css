@@ -1645,9 +1645,35 @@ textarea {
 
   .services-grid,
   .process-grid,
-  .vision-selector,
   .trust-inner {
     grid-template-columns: 1fr;
+  }
+
+  .vision-selector {
+    display: flex !important;
+    flex-direction: row !important;
+    grid-template-columns: none !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
+    padding: 6px !important;
+    gap: 8px !important;
+  }
+
+  .vision-selector::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .vision-tab {
+    flex-shrink: 0 !important;
+    width: auto !important;
+    min-width: 140px !important;
+    padding: 10px 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
   }
 
   .service-card,
