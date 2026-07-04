@@ -629,24 +629,13 @@ export default function BuilderHero() {
         .stage-card-item {
           width: 215px;
           min-width: 185px;
-          scroll-snap-align: center;
         }
         @media (max-width: 992px) {
           .stage-row-scroll {
             justify-content: flex-start;
-            scroll-snap-type: x mandatory;
           }
           .connector-line-wrapper {
             display: none !important;
-          }
-        }
-        @media (max-width: 620px) {
-          .stage-card-item {
-            width: calc(100vw - 48px) !important;
-            min-width: calc(100vw - 48px) !important;
-          }
-          .stage-row-scroll {
-            gap: 16px;
           }
         }
       `}</style>
