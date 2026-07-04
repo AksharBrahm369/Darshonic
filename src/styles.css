@@ -52,6 +52,44 @@ textarea {
   font: inherit;
 }
 
+/* Main View Split */
+.dashboard-main-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Central Visualization Canvas */
+.dashboard-canvas {
+  position: relative;
+  height: 290px;
+  background: #0b0f14;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-telemetry {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #0c1015;
+  height: 124px;
+  box-sizing: border-box;
+}
+
+.dashboard-telemetry .canvas-widget {
+  position: relative;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  background: rgba(18, 24, 32, 0.4);
+}
+
 .hero {
   position: relative;
   overflow: hidden;
@@ -354,20 +392,26 @@ textarea {
   pointer-events: none;
 }
 
-.system-map-path {
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-dasharray: 9 10;
-  animation: systemDashFlow 12s linear infinite;
+.system-map.wire-static {
+  stroke: rgba(24, 183, 164, 0.12);
+  stroke-width: 0.5;
 }
 
-.system-map-path-teal {
-  stroke: rgba(24, 183, 164, 0.45);
+.wire-animated {
+  stroke-width: 0.5;
+  animation: flowWire 12s linear infinite;
 }
 
-.system-map-path-steel {
-  stroke: rgba(111, 143, 175, 0.45);
+.wire-teal {
+  stroke: var(--teal);
+  opacity: 0.7;
+  filter: drop-shadow(0 0 1px rgba(24, 183, 164, 0.4));
+}
+
+.wire-green {
+  stroke: var(--signal);
+  opacity: 0.7;
+  filter: drop-shadow(0 0 1px rgba(183, 243, 107, 0.4));
 }
 
 .system-map-pulse {
@@ -1299,6 +1343,12 @@ textarea {
   }
 }
 
+@keyframes flowWire {
+  to {
+    stroke-dashoffset: -50;
+  }
+}
+
 @keyframes systemCardIn {
   from {
     opacity: 0;
@@ -1503,9 +1553,18 @@ textarea {
   }
 
   .system-intelligence-map {
-    aspect-ratio: auto;
+    aspect-ratio: 1 / 1;
     min-height: 0;
-    padding: 20px;
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  .dashboard-telemetry {
+    display: none !important;
+  }
+
+  .dashboard-canvas {
+    height: 100%;
   }
 
   .system-map-frame {

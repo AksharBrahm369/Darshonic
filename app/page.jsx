@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -27,6 +27,7 @@ import {
   Workflow
 } from "lucide-react";
 import SystemIntelligenceMap from "../src/SystemIntelligenceMap";
+import BuilderHero from "../components/BuilderHero";
 
 const fadeUp = {
   initial: { opacity: 0, y: 22 },
@@ -382,14 +383,50 @@ function Services() {
 }
 
 function VisionMap() {
-  const [selected, setSelected] = useState("AI Automation");
+  const [selected, setSelected] = useState("Website");
+  const options = useMemo(() => Object.keys(visionOptions), []);
   const active = visionOptions[selected];
   const ActiveIcon = active.icon;
 
   const techCopy = useMemo(() => active.technologies.join(" / "), [active.technologies]);
+  const sectionRef = useRef(null);
+  const [isIntersecting, setIsIntersecting] = useState(false);
+
+  // Monitor section visibility in viewport (Intersection Observer)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsIntersecting(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setSelected("Website"); // Start from the first tab when entering viewport
+        }
+      },
+      { threshold: 0.12 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Automatically cycle through tabs every 6 seconds, ONLY when the section is currently visible
+  useEffect(() => {
+    if (!isIntersecting) return;
+
+    const timer = setInterval(() => {
+      setSelected((curr) => {
+        const nextIdx = (options.indexOf(curr) + 1) % options.length;
+        return options[nextIdx];
+      });
+    }, 6000);
+
+    return () => clearInterval(timer);
+  }, [options, selected, isIntersecting]);
 
   return (
-    <section className="section vision-section" id="vision-map">
+    <section ref={sectionRef} className="section vision-section" id="vision-map">
       <div className="section-inner">
         <motion.div className="section-heading centered-heading" {...fadeUp}>
           <SectionLabel dark>Darshonic Vision Map</SectionLabel>
@@ -618,7 +655,7 @@ function ContactCta() {
 export default function App() {
   return (
     <>
-      <Hero />
+      <BuilderHero />
       <Services />
       <VisionMap />
       <Process />
