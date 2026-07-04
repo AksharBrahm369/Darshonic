@@ -391,6 +391,31 @@ function VisionMap() {
   const techCopy = useMemo(() => active.technologies.join(" / "), [active.technologies]);
   const sectionRef = useRef(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const selectorRef = useRef(null);
+
+  // Automatically scroll/center the active selector tab on mobile/tablet viewports
+  useEffect(() => {
+    const container = selectorRef.current;
+    if (!container) return;
+
+    // Only scroll if container is actually scrollable (overflow-x active)
+    if (container.scrollWidth <= container.clientWidth) return;
+
+    const tabs = container.querySelectorAll(".vision-tab-item");
+    const activeIdx = options.indexOf(selected);
+    const activeTab = tabs[activeIdx];
+
+    if (activeTab) {
+      const containerWidth = container.clientWidth;
+      const tabWidth = activeTab.clientWidth;
+      const tabOffsetLeft = activeTab.offsetLeft;
+
+      container.scrollTo({
+        left: tabOffsetLeft - (containerWidth - tabWidth) / 2,
+        behavior: "smooth"
+      });
+    }
+  }, [selected, options]);
 
   // Monitor section visibility in viewport (Intersection Observer)
   useEffect(() => {
@@ -438,13 +463,13 @@ function VisionMap() {
         </motion.div>
 
         <motion.div className="vision-map" {...fadeUp}>
-          <div className="vision-selector" role="tablist" aria-label="Solution selector">
+          <div ref={selectorRef} className="vision-selector" role="tablist" aria-label="Solution selector">
             {Object.keys(visionOptions).map((option) => {
               const OptionIcon = visionOptions[option].icon;
               const isActive = selected === option;
               return (
                 <button
-                  className={isActive ? "vision-tab active" : "vision-tab"}
+                  className={isActive ? "vision-tab active vision-tab-item" : "vision-tab vision-tab-item"}
                   key={option}
                   type="button"
                   onClick={() => setSelected(option)}
