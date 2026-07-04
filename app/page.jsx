@@ -677,6 +677,53 @@ function ContactCta() {
   );
 }
 
+function Footer() {
+  return (
+    <footer
+      style={{
+        padding: "48px 24px",
+        background: "#0c1015",
+        borderTop: "1px solid rgba(244, 247, 250, 0.08)",
+        textAlign: "center",
+        color: "var(--white-muted)",
+        fontFamily: "Inter, sans-serif"
+      }}
+    >
+      <div style={{ maxWidth: "1180px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "12px", alignItems: "center", justifyContent: "center" }}>
+        <p style={{ margin: 0, fontSize: "14px", color: "rgba(244, 247, 250, 0.6)" }}>
+          Want to know more about Founder ?{" "}
+          <a
+            href="https://darshan-portfolio369.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "var(--teal)",
+              textDecoration: "none",
+              fontWeight: 600,
+              borderBottom: "1px dashed var(--teal)",
+              paddingBottom: "1px",
+              transition: "color 180ms ease, border-color 180ms ease"
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.color = "var(--signal)";
+              e.currentTarget.style.borderColor = "var(--signal)";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.color = "var(--teal)";
+              e.currentTarget.style.borderColor = "var(--teal)";
+            }}
+          >
+            Darshan Zala
+          </a>
+        </p>
+        <p style={{ margin: 0, fontSize: "12px", color: "rgba(244, 247, 250, 0.3)" }}>
+          © {new Date().getFullYear()} Darshonic. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  );
+}
+
 export default function App() {
   return (
     <>
@@ -687,6 +734,7 @@ export default function App() {
       <CaseStudies />
       <TrustBand />
       <ContactCta />
+      <Footer />
     </>
   );
 }
