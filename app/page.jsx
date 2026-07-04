@@ -310,20 +310,6 @@ function Hero() {
               View capabilities
             </Button>
           </div>
-          <div className="hero-proof" aria-label="Company capabilities">
-            <div>
-              <strong>5</strong>
-              <span>Core solution tracks</span>
-            </div>
-            <div>
-              <strong>AI + SaaS</strong>
-              <span>From workflow to product</span>
-            </div>
-            <div>
-              <strong>Scale-ready</strong>
-              <span>Built for reliable growth</span>
-            </div>
-          </div>
         </motion.div>
         <motion.div
           className="hero-visual-wrap"
